@@ -66,7 +66,7 @@ def animals_to_string(animals: dict)-> str:
 
 def animal_to_html(animal: dict)->str:
   '''
-  Converts the information of one animal into a form : Name:...<br/>...Typa:...<br/> 
+  Converts the information of one animal into a form for Cards is needed 
   :param animal: dict --> element of the list of animals, means one animal
   :return: str --> containig all information of the animal in one string'''
   animal_name: str = animal.get('name', None)
@@ -74,15 +74,16 @@ def animal_to_html(animal: dict)->str:
   animal_locations: str = animal.get('locations', None)
   animal_type: str = animal['characteristics'].get('type', None)
   
-  outstr: str = ""
-  if animal_name !=  None:
-    outstr += f"Name: {animal_name}<br/>"
+  
+  outstr: str = f'<div class="card__title">{animal_name}</div><br/>\n'
+  outstr += '<p class="card__text">\n'
   if animal_diet !=  None:
-    outstr += f"Diet: {animal_diet}<br/>"
+    outstr += f"Diet: {animal_diet}<br/>\n"
   if animal_locations!=  None:
-    outstr += f"Location: {animal_locations[0]}<br/>"
+    outstr += f"Location: {animal_locations[0]}<br/>\n"
   if animal_type!=  None:
-    outstr += f"Type: {animal_type}<br/>"
+    outstr += f"Type: {animal_type}<br/>\n"
+  outstr += '</p>'
   return outstr
 
   
