@@ -62,19 +62,48 @@ def animals_to_string(animals: dict)-> str:
     outstr += animal_to_string(animal)
     outstr += "\n"
   return outstr
+
+
+def animal_to_html(animal: dict)->str:
+  '''
+  Converts the information of one animal into a form : Name:...<br/>...Typa:...<br/> 
+  :param animal: dict --> element of the list of animals, means one animal
+  :return: str --> containig all information of the animal in one string'''
+  animal_name: str = animal.get('name', None)
+  animal_diet: str = animal['characteristics'].get('diet', None)
+  animal_locations: str = animal.get('locations', None)
+  animal_type: str = animal['characteristics'].get('type', None)
+  
+  outstr: str = ""
+  if animal_name !=  None:
+    outstr += f"Name: {animal_name}<br/>"
+  if animal_diet !=  None:
+    outstr += f"Diet: {animal_diet}<br/>"
+  if animal_locations!=  None:
+    outstr += f"Location: {animal_locations[0]}<br/>"
+  if animal_type!=  None:
+    outstr += f"Type: {animal_type}<br/>"
+  return outstr
+
+  
+def animals_to_html(animals: dict)-> str:
+  outstr: str = ""
+  for animal in animals:
+    outstr += "<li class=\"cards__item\">"
+    outstr += animal_to_html(animal)
+    outstr += "</li>"
+  return outstr
     
 
-print(JSON_FILE)
 animals_data = load_data('animals_data.json')
 #print(animals_data)
 #for animal in animals_data:
 #  print_animal(animal)
 
-replacestr_new = animals_to_string(animals_data)
+replacestr_new = animals_to_html(animals_data)
 with open(HTLM_TEMPLATE_FILE, "r") as html_reader:
   html_text = html_reader.read()
-html_text.replace(REPLACE_TEXT, replacestr_new)
-
+html_text = html_text.replace(REPLACE_TEXT, replacestr_new)
 with open(HTML_OUT_FILE, "w") as html_writer:
   html_writer.write(html_text)
    
