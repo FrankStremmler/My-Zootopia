@@ -1,2 +1,4 @@
+.venv
+.idea
 animals_template copy.html
 animals.html
