@@ -1,9 +1,9 @@
 import json
 
 
-JSON_FILE = r"animals_data.json"
-HTLM_TEMPLATE_FILE = r"animals_template.html"
-HTML_OUT_FILE = r"animals.html"
+JSON_FILE = r"./animals_data.json"
+HTLM_TEMPLATE_FILE = r"./animals_template.html"
+HTML_OUT_FILE = r"./animals.html"
 REPLACE_TEXT = "__REPLACE_ANIMALS_INFO__"
 
 
