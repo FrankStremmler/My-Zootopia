@@ -13,57 +13,6 @@ def load_data(file_path):
         return json.load(json_reader)
 
 
-def print_animal(animal: dict)->None:
-    '''
-    Prints the information of one animal
-    :param animal: dict --> element of the list of animals
-    '''
-    animal_name: str|None = animal.get('name', None)
-    animal_diet: str|None = animal['characteristics'].get('diet', None)
-    animal_locations: str|None = animal.get('locations', None)
-    animal_type: str|None = animal['characteristics'].get('type', None)
-
-    if animal_name !=  None:
-        print(f"Name: {animal_name}")
-    if animal_diet !=  None:
-        print(f"Diet: {animal_diet}")
-    if animal_locations!=  None:
-       print(f"Location: {animal_locations[0]}")
-    if animal_type!=  None:
-       print(f"Type: {animal_type}")
-    print()
-
-
-def animal_to_string(animal: dict)->str:
-    '''
-    Prints the information of one animal
-    :param animal: dict --> element of the list of animals, means one animal
-    :return: str --> containig all information of the animal in one string'''
-    animal_name: str|None = animal.get('name', None)
-    animal_diet: str|None = animal['characteristics'].get('diet', None)
-    animal_locations: str|None = animal.get('locations', None)
-    animal_type: str|None = animal['characteristics'].get('type', None)
-
-    outstr: str = ""
-    if animal_name !=  None:
-       outstr += f"Name: {animal_name}\n"
-    if animal_diet !=  None:
-       outstr += f"Diet: {animal_diet}\n"
-    if animal_locations!=  None:
-        outstr += f"Location: {animal_locations[0]}\n"
-    if animal_type!=  None:
-        outstr += f"Type: {animal_type}\n"
-    return outstr
-
-
-def animals_to_string(animals: dict)-> str:
-    outstr = ""
-    for animal in animals:
-        outstr += animal_to_string(animal)
-        outstr += "\n"
-    return outstr
-
-
 def animal_to_html(animal: dict)->str:
     '''
     Converts the information of one animal into a form for Cards is needed
@@ -71,18 +20,20 @@ def animal_to_html(animal: dict)->str:
     :return: str --> containig all information of the animal in one string'''
     animal_name: str = animal['name'] # a name can't be optional
     animal_diet: str|None = animal['characteristics'].get('diet', None)
-    animal_locations: str|None = animal.get('locations', None)
+    animal_locations: list|None = animal.get('locations', None)
     animal_type: str|None = animal['characteristics'].get('type', None)
 
-
-    outstr: str = f'<div class="card__title">{animal_name}</div><br/>\n'
+    # <li> is added at the calling function
+    # Title is of class card__title displaying the Name inside a <div>-Tag
+    # Information of the animal is placed inside a <p>-Tag and from class card__item
+    outstr: str = f'<div class="card__title">{animal_name}</div>\n'
     outstr += '<p class="card__text">\n'
-    if animal_diet !=  None:
-       outstr += f"Diet: {animal_diet}<br/>\n"
-    if animal_locations!=  None:
-        outstr += f"Location: {animal_locations[0]}<br/>\n"
-    if animal_type!=  None:
-        outstr += f"Type: {animal_type}<br/>\n"
+    if animal_diet is not None:
+       outstr += f"<strong>Diet:</strong> {animal_diet}<br/>\n"
+    if animal_locations is not  None:
+        outstr += f"<strong>Location:</strong> {animal_locations[0]}<br/>\n"
+    if animal_type is not  None:
+        outstr += f"<strong>Type:</strong> {animal_type}<br/>\n"
     outstr += '</p>'
     return outstr
 
@@ -94,20 +45,28 @@ def animals_to_html(animals: list)-> str:
     '''
     outstr: str = ""
     for animal in animals:
-        outstr += "<li class=\"cards__item\">"
-        outstr += animal_to_html(animal)
-        outstr += "</li>"
+        outstr += "<li class=\"cards__item\">\n"
+        outstr += f"{animal_to_html(animal)}\n"
+        outstr += "</li>\n"
     return outstr
 
 
-animals_data = load_data('animals_data.json')
-#print(animals_data)
-#for animal in animals_data:
-#  print_animal(animal)
+def main():
+    '''
+    Standard-main, simple and straight
+    '''
+    # load animal-data from .json-file
+    animals_data = load_data('animals_data.json')
+    replacestr_new: str = animals_to_html(animals_data)
 
-replacestr_new: str = animals_to_html(animals_data)
-with open(HTLM_TEMPLATE_FILE, "r") as html_reader:
-    html_text = html_reader.read()
-html_text = html_text.replace(REPLACE_TEXT, replacestr_new)
-with open(HTML_OUT_FILE, "w") as html_writer:
-    html_writer.write(html_text)
+    # load index.html as Text.
+    with open(HTLM_TEMPLATE_FILE, "r") as html_reader:
+        html_text = html_reader.read()
+    # replacing the text with HTML-Code created
+    html_text = html_text.replace(REPLACE_TEXT, replacestr_new)
+    # write updated HTML-Code to index.html
+    with open(HTML_OUT_FILE, "w") as html_writer:
+        html_writer.write(html_text)
+
+if __name__ == "__main__":
+    main()
